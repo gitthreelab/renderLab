@@ -1,0 +1,35 @@
+.footer {
+  margin-top: 4rem;
+  border-top: 1px solid var(--line-2);
+  padding: 1.5rem 0 2rem;
+  font-size: 0.875rem;
+  color: var(--text-2);
+}
+
+.inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+}
+
+.line {
+  margin: 0;
+}
+
+.brand {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.placeholder {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--warning);
+  background: var(--warning-soft);
+  border: 1px dashed var(--warning);
+  border-radius: var(--radius-sm);
+  padding: 0.05rem 0.4rem;
+  cursor: help;
+}

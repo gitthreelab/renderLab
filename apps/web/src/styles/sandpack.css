@@ -1,0 +1,55 @@
+/* Ajustes globales sobre Sandpack: sus clases (.sp-*) las genera la librería,
+ * así que no pueden ir en un CSS Module. Solo afectan al sandbox dentro de
+ * .rl-sandpack (panel React). Los colores los pone el tema (lab/sandpackTheme.ts). */
+
+.rl-sandpack .sp-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* SandpackLayout solo se usa como ancla del IntersectionObserver: sin su marco. */
+.rl-sandpack .sp-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.rl-sandpack .sp-layout > * {
+  flex: none;
+  min-width: 0;
+  width: 100%;
+}
+
+.rl-sandpack .sp-preview {
+  background: var(--surface);
+}
+
+.rl-sandpack .sp-preview-container {
+  background: #fff;
+}
+
+.rl-sandpack .sp-preview-iframe {
+  min-height: 0;
+  background: #fff;
+}
+
+.rl-sandpack .sp-code-editor,
+.rl-sandpack .sp-console {
+  border-top: 1px solid var(--line-2);
+}
+
+.rl-sandpack .sp-tabs {
+  border-bottom: 1px solid var(--line-2);
+}
+
+.rl-sandpack .sp-cm {
+  font-variant-ligatures: none;
+}
+
+.rl-sandpack .sp-console {
+  font-family: var(--font-mono);
+}

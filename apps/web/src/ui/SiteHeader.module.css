@@ -1,0 +1,65 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid var(--line-2);
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 56px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+.brand:hover {
+  text-decoration: underline;
+}
+
+.mark {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  width: 20px;
+  height: 20px;
+  padding: 4px;
+  border-radius: 5px;
+  background: #16191d;
+}
+
+.mark span:first-child {
+  background: #ff6b8a;
+  border-radius: 1px;
+}
+
+.mark span:last-child {
+  background: #61dafb;
+  border-radius: 1px;
+}
+
+.tagline {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-2);
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 640px) {
+  .tagline {
+    display: none;
+  }
+}

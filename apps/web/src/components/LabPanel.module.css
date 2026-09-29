@@ -1,0 +1,67 @@
+.panel {
+  --fw: var(--text);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.panel[data-framework='angular'] {
+  --fw: var(--angular);
+}
+
+.panel[data-framework='react'] {
+  --fw: var(--react);
+}
+
+/* Barra superior con el color del framework. */
+.panel::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background: var(--fw);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  min-height: 50px;
+  padding: 0.5rem 0.875rem;
+  border-bottom: 1px solid var(--line-2);
+}
+
+.title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.hint {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--text-2);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}

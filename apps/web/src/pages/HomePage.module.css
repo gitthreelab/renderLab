@@ -1,0 +1,369 @@
+/* Hero */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 3rem 4rem;
+  align-items: center;
+  padding: 4rem 0 3rem;
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 40rem;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.heroTitle {
+  font-size: clamp(2.25rem, 1.4rem + 2.8vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.lead {
+  font-size: 1.1875rem;
+  line-height: 1.55;
+}
+
+.notLead {
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: var(--text-2);
+  padding-left: 1rem;
+  border-left: 3px solid var(--line);
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.heroLink {
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.heroLink:hover {
+  text-decoration: underline;
+}
+
+/* Muestra del laboratorio (hero) */
+
+.specimen {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.specimenBoard {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.specimenBoard span {
+  --fw: var(--text);
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: baseline;
+  white-space: nowrap;
+}
+
+.specimenBoard span[data-framework='angular'] {
+  --fw: var(--angular);
+}
+
+.specimenBoard span[data-framework='react'] {
+  --fw: var(--react);
+  justify-content: flex-end;
+}
+
+.specimenBoard b {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fw);
+}
+
+.specimenReset {
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-2);
+}
+
+.specimenPanels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.specimenPanel {
+  --fw: var(--text);
+  --fw-soft: var(--surface-2);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.specimenPanel[data-framework='angular'] {
+  --fw: var(--angular);
+  --fw-soft: var(--angular-soft);
+}
+
+.specimenPanel[data-framework='react'] {
+  --fw: var(--react);
+  --fw-soft: var(--react-soft);
+}
+
+.specimenPanel::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background: var(--fw);
+}
+
+.specimenTag {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fw);
+  border-bottom: 1px solid var(--line-2);
+}
+
+.specimenTree {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.specimenTree li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  border: 1.5px solid var(--line-2);
+  color: var(--text-2);
+}
+
+.specimenTree b {
+  font-weight: 600;
+  min-width: 1.5rem;
+  padding: 0 0.3rem;
+  text-align: center;
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+
+.specimenTree li[data-refreshed] {
+  color: var(--text);
+  animation: flash 2.6s infinite;
+}
+
+/* Como en la sonda real: los ancestros parpadean un instante antes que los hijos. */
+.specimenTree li:nth-child(2) {
+  animation-delay: 40ms;
+}
+
+.specimenTree li:nth-child(3) {
+  animation-delay: 80ms;
+}
+
+.specimenTree li:nth-child(4) {
+  animation-delay: 120ms;
+}
+
+.specimenTree li:nth-child(5) {
+  animation-delay: 160ms;
+}
+
+.specimenTree li:nth-child(6) {
+  animation-delay: 200ms;
+}
+
+.specimenTree li[data-refreshed] b {
+  background: var(--fw);
+  color: #fff;
+}
+
+@keyframes flash {
+  0%,
+  12% {
+    border-color: var(--fw);
+    background: var(--fw-soft);
+  }
+
+  13%,
+  100% {
+    border-color: var(--line-2);
+    background: transparent;
+  }
+}
+
+/* Secciones */
+
+.section {
+  padding: 3rem 0 0;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line-2);
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+  counter-reset: none;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stepNumber {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-2);
+}
+
+.stepTitle {
+  font-size: 1.25rem;
+}
+
+.stepText {
+  color: var(--text-2);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  padding: 1.25rem 1.25rem 1.125rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  transition:
+    border-color 150ms ease,
+    transform 150ms ease;
+}
+
+.card:hover {
+  border-color: var(--text-2);
+  transform: translateY(-2px);
+}
+
+.cardOrder {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.cardSummary {
+  color: var(--text-2);
+  flex: 1;
+}
+
+.cardCta {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.card:hover .cardCta {
+  text-decoration: underline;
+}
+
+@media (max-width: 960px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    padding-top: 3rem;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding-top: 2rem;
+  }
+
+  .specimenPanels {
+    grid-template-columns: 1fr;
+  }
+
+  .specimenBoard {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Misma especificidad que `.specimenBoard span`, para ganarle. */
+  .specimenBoard .specimenReset {
+    display: none;
+  }
+
+  .specimenBoard span[data-framework='react'] {
+    justify-content: flex-start;
+  }
+}

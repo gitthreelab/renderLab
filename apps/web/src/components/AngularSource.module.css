@@ -1,0 +1,36 @@
+.drawer {
+  max-height: var(--drawer-height);
+  overflow: auto;
+  border-top: 1px solid var(--line-2);
+  background: var(--surface);
+}
+
+.file + .file {
+  border-top: 1px solid var(--line-2);
+}
+
+.name {
+  position: sticky;
+  top: 0;
+  padding: 0.45rem 0.875rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-2);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line-2);
+}
+
+.code {
+  margin: 0;
+  padding: 0.875rem;
+  font-size: 13px;
+  line-height: 20px;
+  tab-size: 2;
+  overflow-x: auto;
+}
+
+.empty {
+  padding: 0.875rem;
+  font-size: 0.875rem;
+  color: var(--text-2);
+}

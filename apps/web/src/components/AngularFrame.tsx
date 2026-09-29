@@ -1,13 +1,12 @@
+import styles from './AngularFrame.module.css';
+
 type AngularFrameProps = {
   slug: string;
+  /** Título de la receta, para el título accesible del iframe. */
+  title: string;
 };
 
-export default function AngularFrame({ slug }: AngularFrameProps) {
-  return (
-    <iframe
-      src={`/ng/${slug}`}
-      title="Versión Angular"
-      style={{ width: '100%', height: 300, border: '1px solid #ccc' }}
-    />
-  );
+/** La receta Angular real, servida por ng-host bajo /ng/<slug> (dev: proxy; build: estático). */
+export default function AngularFrame({ slug, title }: AngularFrameProps) {
+  return <iframe className={styles.frame} src={`/ng/${slug}`} title={`Vista Angular: ${title}`} />;
 }

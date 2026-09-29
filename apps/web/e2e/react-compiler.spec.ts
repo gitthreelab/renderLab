@@ -26,10 +26,8 @@ async function openRecipe(page: Page, fixture: string) {
       messages.push(event.data);
     });
   });
+  // Sandpack arranca al cargar la página (initMode: immediate), sin hacer scroll.
   await page.goto(RECIPE_URL);
-  // Sandpack arranca solo cuando el sandbox es visible; el texto de la receta lo
-  // deja por debajo del viewport.
-  await page.locator('.sp-layout').scrollIntoViewIfNeeded();
 }
 
 // Último contador por instancia de React (misma lógica que useProbeCounts).
@@ -92,9 +90,18 @@ async function setToggles(page: Page, toggles: { strictMode: boolean; compiler: 
   await clearProbeMessages(page);
 }
 
+// El editor va en un cajón cerrado por defecto: lo abre el botón «Código» del
+// panel React. El estado del cajón sobrevive a los cambios de toggle.
+async function openEditor(page: Page) {
+  const button = page.getByRole('button', { name: 'Código React' });
+  if ((await button.getAttribute('aria-expanded')) !== 'true') await button.click();
+  await expect(page.locator('.sp-code-editor .cm-content')).toBeVisible();
+}
+
 // Editor de Sandpack: selecciona todo e inserta el texto de golpe (sin
 // autocierre de llaves ni autoindentado), como pegar el fichero entero.
 async function replaceEditorCode(page: Page, code: string) {
+  await openEditor(page);
   await page.locator('.sp-code-editor .cm-content').click();
   await page.keyboard.press('ControlOrMeta+A');
   await page.keyboard.insertText(code);

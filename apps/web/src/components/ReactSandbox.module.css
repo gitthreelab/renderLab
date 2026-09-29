@@ -1,0 +1,97 @@
+.sandpack {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.previewWrap {
+  min-width: 0;
+}
+
+.preview {
+  height: var(--preview-height);
+}
+
+.empty {
+  padding: 0.875rem;
+  font-size: 0.875rem;
+  color: var(--text-2);
+}
+
+/* Estado del React Compiler, justo debajo de los toggles. */
+.compiler {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.5rem 0.875rem;
+  border-bottom: 1px solid var(--line-2);
+  background: var(--react-soft);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.status {
+  margin: 0;
+  color: var(--react);
+  font-weight: 500;
+}
+
+.alert {
+  margin: 0;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--warning-soft);
+  color: var(--warning);
+  border: 1px solid color-mix(in srgb, var(--warning) 35%, transparent);
+}
+
+.problems {
+  margin: 0.35rem 0 0;
+  padding-left: 1.2rem;
+  font-weight: 400;
+}
+
+/* Cajón con el editor y la consola. */
+.drawer {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line-2);
+}
+
+.drawerBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  background: var(--surface-2);
+}
+
+.drawerHint {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-2);
+}
+
+.pane {
+  min-width: 0;
+}
+
+.editor,
+.console {
+  height: var(--drawer-height);
+}
+
+@media (max-width: 640px) {
+  .drawerHint {
+    display: none;
+  }
+}

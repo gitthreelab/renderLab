@@ -1,0 +1,77 @@
+/* Tokens de diseño de Render Lab.
+ *
+ * Un color por framework (--angular, --react) para etiquetas, marcador y
+ * leyendas; neutros para todo lo demás. Todos los pares texto/fondo cumplen
+ * contraste AA (≥ 4,5:1) en claro y en oscuro. */
+
+:root {
+  color-scheme: light dark;
+
+  /* Tipografía: IBM Plex Sans para leer, IBM Plex Mono para datos y código. */
+  --font-sans:
+    'IBM Plex Sans Variable', 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto,
+    sans-serif;
+  --font-mono:
+    'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, 'SF Mono', Menlo, monospace;
+
+  /* Neutros */
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --surface-2: #eef0f3;
+  --surface-3: #e3e7ec;
+  --text: #16191d;
+  --text-2: #5c6675;
+  --line: #d6dbe2;
+  --line-2: #e6e9ee;
+  /* Bordes de controles: ≥ 3:1 sobre la superficie (contraste no textual). */
+  --line-strong: #8b95a3;
+
+  /* Frameworks */
+  --react: #0e7490;
+  --react-soft: #e0f5fa;
+  --angular: #c8102e;
+  --angular-soft: #fde7ec;
+
+  /* Estados */
+  --warning: #92400e;
+  --warning-soft: #fdf3e0;
+  --focus: var(--text);
+
+  /* Forma */
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 2px rgb(22 25 29 / 0.05), 0 10px 30px -14px rgb(22 25 29 / 0.16);
+  --container: 1360px;
+  --preview-height: 400px;
+  --drawer-height: 360px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e1116;
+    --surface: #151a21;
+    --surface-2: #1b2129;
+    --surface-3: #232a34;
+    --text: #e7eaef;
+    --text-2: #a4adba;
+    --line: #2a323d;
+    --line-2: #202730;
+    --line-strong: #6b7684;
+
+    --react: #61dafb;
+    --react-soft: #10303a;
+    --angular: #ff6b8a;
+    --angular-soft: #3a1520;
+
+    --warning: #fbbf24;
+    --warning-soft: #2e2410;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 30px -14px rgb(0 0 0 / 0.6);
+  }
+}
+
+@media (max-width: 720px) {
+  :root {
+    --preview-height: 320px;
+    --drawer-height: 320px;
+  }
+}

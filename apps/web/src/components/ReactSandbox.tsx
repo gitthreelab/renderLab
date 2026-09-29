@@ -4,15 +4,20 @@ import {
   SandpackLayout,
   SandpackPreview,
   SandpackProvider,
-  SandpackStack,
   useSandpack,
   type SandpackFiles,
+  type SandpackOptions,
 } from '@codesandbox/sandpack-react';
 import probeSource from '@render-lab/probe-react/probe.js?raw';
-import { use, useDeferredValue, useEffect, useMemo } from 'react';
+import { use, useDeferredValue, useEffect, useMemo, useState } from 'react';
 import type * as ReactCompiler from '../lab/reactCompiler';
+import { sandpackThemeFor } from '../lab/sandpackTheme';
+import { usePrefersDark } from '../lab/useColorScheme';
 import { getRecipeDependencies } from '../recipes/dependencies';
 import { getReactFiles } from '../recipes/reactFiles';
+import buttons from '../ui/buttons.module.css';
+import '../styles/sandpack.css';
+import styles from './ReactSandbox.module.css';
 
 const PROBE_PATH = '/render-lab-probe.js';
 const ENTRY_PATH = '/render-lab-entry.js';
@@ -21,6 +26,16 @@ const ENTRY_PATH = '/render-lab-entry.js';
 const COMPILED_DIR = '/__compiled__';
 // Las fija el lab (§6); el schema del package.json de la receta impide declararlas.
 const LAB_DEPENDENCY_VERSIONS = { react: '19.2.8', 'react-dom': '19.2.8' };
+
+// Arranca al cargar la página, esté o no la preview en pantalla: el modo lazy
+// (por defecto) observa el SandpackLayout con un margen enorme, así que su
+// IntersectionObserver dispara nada más observar. No se usa 'immediate' (ni un
+// árbol sin SandpackLayout, que equivale a 'immediate') porque entonces Sandpack
+// crea el cliente en el doble montaje de StrictMode, dos veces a la vez, y el
+// bundler queda hablando con un cliente que no es el que guarda el provider.
+const SANDPACK_OPTIONS: SandpackOptions = {
+  initModeObserverOptions: { rootMargin: '100000px 0px' },
+};
 
 type Compiler = typeof ReactCompiler;
 type CompilerLoad = { ok: true; compiler: Compiler } | { ok: false; error: string };
@@ -133,16 +148,16 @@ function CompiledMirror({ slug, compiler }: CompiledMirrorProps) {
       : 'Parte del código se ejecuta SIN optimizar.';
 
   return (
-    <div>
-      <p role="status">
+    <div className={styles.compiler}>
+      <p role="status" className={styles.status}>
         React Compiler: {components}{' '}
         {components === 1 ? 'componente compilado' : 'componentes compilados'}
         {hooks > 0 && ` y ${hooks} ${hooks === 1 ? 'hook' : 'hooks'}`}.
       </p>
       {problems.length > 0 ? (
-        <div role="alert">
+        <div role="alert" className={styles.alert}>
           <strong>Aviso: la compilación ha fallado. {notOptimized}</strong>
-          <ul>
+          <ul className={styles.problems}>
             {problems.map((problem, index) => (
               <li key={index}>{problem}</li>
             ))}
@@ -150,7 +165,7 @@ function CompiledMirror({ slug, compiler }: CompiledMirrorProps) {
         </div>
       ) : (
         components === 0 && (
-          <p role="alert">
+          <p role="alert" className={styles.alert}>
             <strong>
               Aviso: el React Compiler no ha compilado ningún componente. {notOptimized}
             </strong>
@@ -161,43 +176,113 @@ function CompiledMirror({ slug, compiler }: CompiledMirrorProps) {
   );
 }
 
+type DrawerTab = 'editor' | 'console';
+
+type CodeDrawerProps = {
+  id: string;
+};
+
+// Cajón bajo la preview con el editor y la consola de Sandpack. Los dos quedan
+// montados (la consola conserva sus mensajes); se alterna cuál se ve.
+function CodeDrawer({ id }: CodeDrawerProps) {
+  const [tab, setTab] = useState<DrawerTab>('editor');
+
+  return (
+    <div id={id} className={styles.drawer}>
+      <div className={styles.drawerBar} role="group" aria-label="Cajón del sandbox">
+        <button
+          type="button"
+          className={`${buttons.button} ${buttons.small}`}
+          aria-pressed={tab === 'editor'}
+          onClick={() => setTab('editor')}
+        >
+          Editor
+        </button>
+        <button
+          type="button"
+          className={`${buttons.button} ${buttons.small}`}
+          aria-pressed={tab === 'console'}
+          onClick={() => setTab('console')}
+        >
+          Consola
+        </button>
+        <span className={styles.drawerHint}>Edita el código: la vista se recompila sola.</span>
+      </div>
+      <div className={styles.pane} hidden={tab !== 'editor'}>
+        <SandpackCodeEditor showTabs showLineNumbers className={styles.editor} />
+      </div>
+      <div className={styles.pane} hidden={tab !== 'console'}>
+        <SandpackConsole showHeader={false} className={styles.console} />
+      </div>
+    </div>
+  );
+}
+
 type ReactSandboxProps = {
   slug: string;
   strictMode: boolean;
   reactCompiler: boolean;
+  /** Muestra el cajón con el editor y la consola. */
+  showCode: boolean;
+  /** id del cajón, para el aria-controls del botón que lo abre. */
+  codeId: string;
 };
 
-export default function ReactSandbox({ slug, strictMode, reactCompiler }: ReactSandboxProps) {
+export default function ReactSandbox({
+  slug,
+  strictMode,
+  reactCompiler,
+  showCode,
+  codeId,
+}: ReactSandboxProps) {
+  const dark = usePrefersDark();
   const compilerLoad = reactCompiler ? use(loadReactCompiler()) : null;
   const compiler = compilerLoad?.ok ? compilerLoad.compiler : null;
   const files = sandboxFilesFor(slug, strictMode, compiler);
+  // Referencia estable: Sandpack descarta las ediciones del lector (vuelve a los
+  // ficheros de las props) cada vez que cambia la identidad de customSetup.
+  const customSetup = useMemo(
+    () => ({
+      entry: ENTRY_PATH,
+      dependencies: { ...getRecipeDependencies(slug), ...LAB_DEPENDENCY_VERSIONS },
+    }),
+    [slug],
+  );
 
-  if (!files) return <p>Esta receta todavía no tiene parte React.</p>;
+  if (!files) return <p className={styles.empty}>Esta receta todavía no tiene parte React.</p>;
 
   return (
     <SandpackProvider
       template="react-ts"
       files={files}
-      customSetup={{
-        entry: ENTRY_PATH,
-        dependencies: { ...getRecipeDependencies(slug), ...LAB_DEPENDENCY_VERSIONS },
-      }}
+      theme={sandpackThemeFor(dark)}
+      customSetup={customSetup}
+      options={SANDPACK_OPTIONS}
+      className={`rl-sandpack ${styles.sandpack}`}
     >
       {compilerLoad && !compilerLoad.ok && (
-        <p role="alert">
-          <strong>
-            Aviso: no se ha podido cargar el React Compiler ({compilerLoad.error}). El código se
-            ejecuta SIN optimizar.
-          </strong>
-        </p>
+        <div className={styles.compiler}>
+          <p role="alert" className={styles.alert}>
+            <strong>
+              Aviso: no se ha podido cargar el React Compiler ({compilerLoad.error}). El código se
+              ejecuta SIN optimizar.
+            </strong>
+          </p>
+        </div>
       )}
       {compiler && <CompiledMirror slug={slug} compiler={compiler} />}
-      <SandpackLayout>
-        <SandpackCodeEditor />
-        <SandpackStack>
-          <SandpackPreview style={{ flex: 7 }} />
-          <SandpackConsole showHeader={false} style={{ flex: 3 }} />
-        </SandpackStack>
+      {/* SandpackLayout registra el ancla del IntersectionObserver (ver SANDPACK_OPTIONS).
+          La preview va envuelta en un div: como hija directa del layout, Sandpack le
+          impone flex-basis 0 y 300px de alto. */}
+      <SandpackLayout className={styles.layout}>
+        <div className={styles.previewWrap}>
+          <SandpackPreview
+            className={styles.preview}
+            showOpenInCodeSandbox={false}
+            showRefreshButton={false}
+          />
+        </div>
+        {showCode && <CodeDrawer id={codeId} />}
       </SandpackLayout>
     </SandpackProvider>
   );

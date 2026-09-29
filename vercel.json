@@ -1,0 +1,14 @@
+{
+    "buildCommand": "pnpm build",
+    "outputDirectory": "apps/web/dist",
+    "rewrites": [
+        {
+            "source": "/ng/:path*",
+            "destination": "/ng/index.html"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ]
+}
