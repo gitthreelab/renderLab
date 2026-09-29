@@ -1,6 +1,95 @@
-## Qué vamos a ver
+## Qué problema resuelve
 
-Tres formas de compartir estado entre componentes: un service con signals
-en Angular, y Context y Zustand en React.
+Varios componentes necesitan el mismo estado: un contador que suma un botón y
+un nombre que no cambia. En Angular lo habitual es un service con signals; en
+React, lo que viene de serie es Context: un componente guarda el estado y lo
+ofrece a su subárbol.
 
-Fíjate en qué componentes parpadean cada vez que cambia el estado.
+## El árbol
+
+Los dos lados pintan lo mismo: `App` contiene a `Boton` ("Sumar"),
+`VerContador` ("Contador: N"), `VerNombre` ("Nombre: Ada") y `Estatico`
+("Soy estático").
+
+- **Angular:** un service `Estado` con los signals `contador` y `nombre`,
+  provisto en `App`. Todos los componentes usan OnPush, la estrategia por
+  defecto de Angular 22.
+- **React:** el estado vive en `EstadoProvider`, que recibe los cuatro
+  componentes como `children`. Cada uno lo lee con `useEstado()`, un hook que
+  llama a `use(EstadoContext)` y lanza un error si no hay provider.
+
+## Qué mirar al pulsar "Sumar"
+
+Solo cambia `contador`. Fíjate en `VerNombre` en los dos lados: su nombre no
+cambia.
+
+## Los números
+
+Badges medidos en modo desarrollo al cargar, tras 1 clic y tras 2 clics:
+
+| Componente       | React     | Angular   |
+| ---------------- | --------- | --------- |
+| `App`            | 1 / 1 / 1 | 1 / 2 / 3 |
+| `EstadoProvider` | 1 / 2 / 3 | —         |
+| `Boton`          | 1 / 2 / 3 | 1 / 2 / 3 |
+| `VerContador`    | 1 / 2 / 3 | 1 / 2 / 3 |
+| `VerNombre`      | 1 / 2 / 3 | 1 / 1 / 1 |
+| `Estatico`       | 1 / 1 / 1 | 1 / 1 / 1 |
+
+React da lo mismo en sus cuatro modos: normal, StrictMode, React Compiler y
+Compiler + StrictMode. Tras 2 clics, el marcador dice "React 14 renders /
+Angular 11 refrescos".
+
+No es una carrera. Los contadores miden cuántas veces se vuelve a ejecutar el
+código de vista (la función en React, el template en Angular), no cuánto
+tarda.
+
+## Por qué se re-renderiza cada componente en React
+
+`sumar` llama a `setContador` y React vuelve a ejecutar `EstadoProvider`, que
+crea un objeto `value` nuevo. React lo compara con el anterior (con
+`Object.is`) y, como es otro, re-renderiza a **todos** los que leen el
+contexto: `Boton`, `VerContador` y `VerNombre`.
+
+Esa es la trampa de Context: no sabe qué parte del valor usa cada consumidor.
+`VerNombre` solo lee `nombre`, pero se re-renderiza igual.
+
+`App` y `Estatico` se quedan en 1. `App` no tiene estado, y los `children` de
+`EstadoProvider` son los mismos elementos de antes: React no vuelve a ejecutar
+`Estatico`, que no lee el contexto. Es el patrón "el estado abajo, los hijos
+como `children`", sin `memo`.
+
+Luego React compara el JSX nuevo con el anterior y solo toca el DOM que
+difiere: el texto de `VerContador`.
+
+## Por qué se refresca cada componente en Angular
+
+Con signals, Angular sabe qué template lee qué signal. Al cambiar `contador`,
+marca para refresco solo a `VerContador`. `VerNombre` lee `nombre`, que no ha
+cambiado, y no se toca.
+
+`Boton` y `App` suben por el evento, no por el estado: un listener de template
+marca como sucia la vista de su componente y la de sus ancestros. El clic
+ocurre en `Boton`, y `App` es su padre. Dónde está el botón decide qué se
+refresca: si estuviera dentro de `VerNombre`, `VerNombre` también sumaría en
+cada clic.
+
+## Qué cambia con StrictMode y con el Compiler
+
+- **StrictMode** ejecuta dos veces cada render en desarrollo, pero la métrica
+  cuenta commits: los números no cambian.
+- **React Compiler** compila los 6 componentes y memoiza el objeto `value`, la
+  función `sumar` y el JSX. Pero no resuelve la trampa: el valor sigue
+  cambiando con cada clic, porque incluye `contador`, y todo consumidor se
+  re-renderiza cuando cambia. `VerNombre` sigue en 1 / 2 / 3. Para evitarlo
+  hay que cambiar el diseño: partir el contexto en dos o usar un store con
+  selectores, que es la siguiente receta.
+
+## Conclusión
+
+Los dos lados ejecutan vista que la pantalla no necesita: React, `VerNombre`;
+Angular, `App` y `Boton`. Cada modelo paga en un sitio distinto. React
+re-ejecuta y compara: la vista es una función del estado, pero la granularidad
+depende de cómo diseñes los contextos. Angular con signals sabe quién lee qué y
+localiza los refrescos del estado, a cambio de mantener ese grafo de
+dependencias y de que los eventos marquen a los ancestros.

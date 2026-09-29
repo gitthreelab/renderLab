@@ -1,0 +1,94 @@
+## Qué problema resuelve
+
+Es la receta hermana de "Estado compartido con Context": mismo árbol y mismo
+estado, pero en React el estado sale del árbol y vive en un store de Zustand.
+La parte Angular es idéntica (service con signals y OnPush, la estrategia por
+defecto de Angular 22) y sirve de referencia.
+
+## El árbol
+
+`App` contiene a `Boton` ("Sumar"), `VerContador` ("Contador: N"),
+`VerNombre` ("Nombre: Ada") y `Estatico` ("Soy estático").
+
+- **Angular:** un service `Estado` con los signals `contador` y `nombre` y el
+  método `sumar()`, provisto en `App`.
+- **React:** `store.ts` crea el store con `create`: `contador`, `nombre` y
+  `sumar`. No hay provider. Cada componente llama a `useEstado` con un
+  selector que elige solo lo que usa: `Boton` pide `sumar`, `VerContador` pide
+  `contador` y `VerNombre` pide `nombre`.
+
+## Qué mirar al pulsar "Sumar"
+
+Fíjate en `VerNombre` y `Boton`.
+
+## Los números
+
+Badges medidos en modo desarrollo al cargar, tras 1 clic y tras 2 clics:
+
+| Componente    | React     | Angular   |
+| ------------- | --------- | --------- |
+| `App`         | 1 / 1 / 1 | 1 / 2 / 3 |
+| `Boton`       | 1 / 1 / 1 | 1 / 2 / 3 |
+| `VerContador` | 1 / 2 / 3 | 1 / 2 / 3 |
+| `VerNombre`   | 1 / 1 / 1 | 1 / 1 / 1 |
+| `Estatico`    | 1 / 1 / 1 | 1 / 1 / 1 |
+
+React da lo mismo en sus cuatro modos: normal, StrictMode, React Compiler y
+Compiler + StrictMode. Tras 2 clics, el marcador dice "React 7 renders /
+Angular 11 refrescos". Con Context, `VerNombre` iba a 1 / 2 / 3; aquí se queda
+en 1.
+
+Los contadores miden cuántas veces se vuelve a ejecutar el código de vista, no
+el rendimiento. Y no lo cuentan todo: Zustand ejecuta cada selector en cada
+cambio del store, fuera del render, y eso no sale en ningún badge.
+
+## Por qué se re-renderiza cada componente en React
+
+`useEstado(selector)` suscribe el componente al store (por debajo, con
+`useSyncExternalStore`). Cuando `sumar` llama a `set`, Zustand ejecuta cada
+selector y compara el resultado con el anterior con `Object.is`. Solo si
+cambia, React re-renderiza ese componente:
+
+- `VerContador`: su selector pasa de 0 a 1. Se re-renderiza.
+- `VerNombre`: `'Ada'` sigue siendo `'Ada'`. Nada.
+- `Boton`: `sumar` es siempre la misma función, creada con el store. Nada.
+- `App` y `Estatico` no están suscritos ni reciben props que cambien.
+
+El precio: la granularidad la escribes tú, selector a selector. Un
+selector que devuelve un objeto nuevo en cada llamada, como
+`(estado) => ({ contador: estado.contador })`, nunca da un resultado igual; en
+Zustand 5 eso acaba en un bucle de renders, y para esos casos existe
+`useShallow`.
+
+## Por qué se refresca cada componente en Angular
+
+Como en la receta de Context: Angular sabe qué template lee qué signal y al
+cambiar `contador` solo marca a `VerContador`. La dependencia no se declara con
+un selector: se registra sola cuando el template lee `estado.contador()`.
+
+`Boton` y `App` suben por el evento. Un listener de template marca como sucia
+la vista de su componente y la de sus ancestros; así un componente OnPush con
+propiedades normales, sin signals, se actualiza tras sus propios eventos. El
+clic ocurre en `Boton` y `App` es su padre. Dónde está el botón decide qué se
+refresca.
+
+Por eso en `Boton` (y en `App`) React se re-renderiza menos que Angular: en
+React, manejar un clic no re-ejecuta el componente; solo lo hace un cambio en
+algo a lo que está suscrito.
+
+## Qué cambia con StrictMode y con el Compiler
+
+- **StrictMode** ejecuta dos veces cada render en desarrollo, pero la métrica
+  cuenta commits: los números no cambian.
+- **React Compiler** compila los 5 componentes y tampoco cambia nada: los
+  demás ya están quietos gracias a la suscripción, y `VerContador` tiene que
+  re-renderizarse porque su texto cambia. No queda render sobrante que evitar.
+
+## Conclusión
+
+Zustand y los signals llegan al mismo sitio por caminos distintos: cada
+componente depende solo de lo que lee. Con Zustand, la dependencia es un
+selector explícito que se compara tras cada cambio del store. Con signals, se
+registra sola al leer, a cambio de que el framework mantenga el grafo de
+dependencias. Las diferencias que quedan, `App` y `Boton`, salen de cómo trata
+cada framework los eventos, no del estado.

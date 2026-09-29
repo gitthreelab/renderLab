@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import mdx from '@mdx-js/rollup';
 import react from '@vitejs/plugin-react';
+import remarkGfm from 'remark-gfm';
 import { runnerImport, type Plugin } from 'vite';
 import { defineConfig } from 'vitest/config';
 
@@ -61,7 +62,8 @@ export default defineConfig({
   plugins: [
     // MDX antes que React: compila recipes/*/content.<locale>.mdx a JSX y
     // plugin-react le aplica Fast Refresh como a cualquier componente.
-    { enforce: 'pre', ...mdx() },
+    // remark-gfm: tablas de GitHub (las recetas las usan para los números medidos).
+    { enforce: 'pre', ...mdx({ remarkPlugins: [remarkGfm] }) },
     react({ include: /\.(mdx|js|jsx|ts|tsx)$/ }),
     ngHostPreviewFallback(),
     recipePackagesCheck(),

@@ -27,6 +27,9 @@ async function openRecipe(page: Page, fixture: string) {
     });
   });
   await page.goto(RECIPE_URL);
+  // Sandpack arranca solo cuando el sandbox es visible; el texto de la receta lo
+  // deja por debajo del viewport.
+  await page.locator('.sp-layout').scrollIntoViewIfNeeded();
 }
 
 // Último contador por instancia de React (misma lógica que useProbeCounts).
