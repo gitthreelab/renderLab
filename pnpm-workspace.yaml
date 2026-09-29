@@ -7,3 +7,11 @@ allowBuilds:
   esbuild: false
   lmdb: false
   msgpackr-extract: false
+
+# recipes/*/angular está fuera de ng-host: sus imports bare se resuelven desde la
+# raíz. Elevar solo lo que usa Angular mantiene una única copia (misma ruta real)
+# para el bundle de ng-host y el prebundle del dev server.
+publicHoistPattern:
+  - '@angular/*'
+  - rxjs
+  - tslib

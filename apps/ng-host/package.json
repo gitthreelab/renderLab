@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "dev": "ng serve",
-    "build": "ng build --configuration development",
-    "typecheck": "tsc -p tsconfig.app.json --noEmit"
+    "generate:routes": "node scripts/generate-recipe-routes.mts",
+    "dev": "pnpm generate:routes && ng serve",
+    "build": "pnpm generate:routes && ng build --configuration development",
+    "typecheck": "pnpm generate:routes && tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.scripts.json"
   },
   "dependencies": {
     "@angular/common": "22.2.0",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@angular/build": "22.2.0",
     "@angular/cli": "22.2.0",
-    "@angular/compiler-cli": "22.2.0"
+    "@angular/compiler-cli": "22.2.0",
+    "@types/node": "^24.19.0"
   }
 }

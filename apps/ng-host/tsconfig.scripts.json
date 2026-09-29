@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "NodeNext",
+    "types": ["node"],
+    "verbatimModuleSyntax": true,
+    /* Node ejecuta los scripts .mts quitando los tipos: solo sintaxis borrable. */
+    "erasableSyntaxOnly": true,
+    "noEmit": true
+  },
+  "include": ["scripts/**/*.mts"]
+}

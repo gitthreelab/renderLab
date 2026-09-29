@@ -7,7 +7,7 @@ import tseslint from 'typescript-eslint';
 export default defineConfig([
   globalIgnores(['spikes/', '**/dist/', '**/out-tsc/', '**/.angular/', 'apps/web/public/ng/']),
   {
-    files: ['**/*.{js,ts,tsx}'],
+    files: ['**/*.{js,ts,mts,tsx}'],
     extends: [js.configs.recommended, tseslint.configs.recommended],
   },
   {
@@ -16,11 +16,11 @@ export default defineConfig([
     languageOptions: { globals: globals.browser },
   },
   {
-    files: ['apps/ng-host/src/**/*.ts'],
+    files: ['apps/ng-host/src/**/*.ts', 'recipes/*/angular/**/*.ts'],
     languageOptions: { globals: globals.browser },
   },
   {
-    files: ['*.{js,ts}', 'apps/*/*.{js,ts}'],
+    files: ['*.{js,ts}', 'apps/*/*.{js,ts}', 'apps/ng-host/scripts/**/*.mts'],
     languageOptions: { globals: globals.node },
   },
 ]);

@@ -5,7 +5,10 @@
   "compilerOptions": {
     "strict": true,
     "outDir": "./out-tsc/app",
+    /* Incluye recipes/ (fuera de ng-host). Sus imports bare se resuelven con el
+       publicHoistPattern de pnpm-workspace.yaml. */
+    "rootDir": "../..",
     "types": []
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "../../recipes/*/angular/**/*.ts"]
 }
