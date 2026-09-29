@@ -20,7 +20,7 @@ React.
 - **P1 TS strict.** Todo `tsconfig` del monorepo DEBE tener `strict: true`.
   Ningún fichero fuente DEBE contener `any` ni `@ts-ignore` ni `@ts-expect-error`.
 - **P2 Una receta = una carpeta.** Añadir una receta DEBE consistir solo
-  en crear `recipes/<slug>/` con `meta.ts`, `content.mdx`, `react/` y
+  en crear `recipes/<slug>/` con `meta.ts`, `content.<locale>.mdx`, `react/` y
   `angular/`. Un diff que añade una receta NO DEBE tocar ficheros fuera de
   esa carpeta.
 - **P3 Sin instrumentación manual.** El código que ve el lector
@@ -30,12 +30,13 @@ React.
 - **P4 React idiomático 2026.** `apps/web/src/**` y `recipes/*/react/**`
   NO DEBEN usar CRA, `React.FC` ni `fetch` dentro de `useEffect`. La única
   excepción es un antipatrón mostrado a propósito, y DEBE estar marcado
-  como tal en el `content.mdx` de la receta.
+  como tal en el `content.<locale>.mdx` de la receta.
 - **P5 Visualizador simple primero.** NO DEBE haber tareas de pulido del
   visualizador mientras `recipes/` no contenga las 5 recetas listadas en
   `IDEA.md` (§MVP).
 - **P6 Versiones fijadas.** Ver §6.
 - **P7 Una tarea por sesión, diff revisado, commit humano.** Ver §5.
+- **P8 Idioma.** El idioma por defecto es el español (es). Todo texto visible de una receta DEBE modelarse por idioma (ficheros `content.<locale>.mdx` y campos de texto de `meta.ts` indexados por locale), de forma que añadir un idioma no cambie la estructura. El selector de idioma y la traducción de la interfaz quedan fuera del MVP.
 
 ## 3. Métrica
 
@@ -80,7 +81,7 @@ Cada ruta del repo cae en exactamente una zona.
 
 - `apps/web/src/**` (componentes, páginas, hooks, bootstrap).
 - `recipes/*/react/**`.
-- `recipes/*/content.mdx`.
+- `recipes/*/content.*.mdx`.
 - `recipes/*/meta.ts`.
 - `packages/probe-react/**`.
 - `spikes/react-probe/**`.
@@ -139,10 +140,11 @@ Cada ruta del repo cae en exactamente una zona.
 
 ## 8. Decisiones abiertas
 
-- Idioma de la web (ES / EN). Bloquea a partir de T03.
+- Ninguna por ahora.
 
 ---
 
 ## Changelog
 
 - 2026-09-28 — Creación. Borrador del agente; revisado y corregido por el humano.
+- 2026-09-29 — Idioma decidido: español por defecto, contenido preparado para varios idiomas (P8).

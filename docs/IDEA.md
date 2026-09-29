@@ -37,7 +37,7 @@ portfolio técnico y como contenido para mentoría.
     (react-scan / bippy; plan B: hook de DevTools propio).
   - packages/probe-ng: sonda basada en el profiler interno de Angular
     (ɵsetProfiler).
-  - recipes/<slug>/: meta.ts, content.mdx, react/, angular/.
+  - recipes/<slug>/: meta.ts, content.es.mdx, react/, angular/.
 - Las sondas envían al padre por postMessage:
   { source: 'render-lab', framework, component, count }, validado con Zod.
 - Dev: ng serve en :4300 con baseHref /ng/ y proxy desde Vite.
@@ -61,7 +61,7 @@ efecto con cleanup.
 
 ## Fuera de alcance del MVP
 Árbol de componentes en el panel padre, modo guion (misma secuencia en
-ambos iframes), métrica de mutaciones DOM, SSR/Next, i18n.
+ambos iframes), métrica de mutaciones DOM, SSR/Next, selector de idioma y traducción de la interfaz.
 
 ## Riesgos principales
 1. Que la sonda React no funcione dentro del iframe de Sandpack.
@@ -74,5 +74,5 @@ T01a spike sonda React · T01b spike sonda Angular · T02 monorepo ·
 T03 protocol + loaders · T04 página de receta · T05 integrar sondas ·
 T06 receta 1 · T07 home, StackBlitz, deploy y README.
 
-## Decisiones abiertas
-- Idioma de la web (ES / EN). Bloquea a partir de T03.
+## Decisiones tomadas
+- Idioma: español por defecto; contenido modelado por idioma desde el principio; selector de idioma fuera del MVP.
