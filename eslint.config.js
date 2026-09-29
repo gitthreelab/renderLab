@@ -29,6 +29,7 @@ export default defineConfig([
       '*.{js,ts}',
       'apps/*/*.{js,ts}',
       'packages/*/*.{js,ts}',
+      'scripts/**/*.js',
       'apps/ng-host/scripts/**/*.mts',
     ],
     languageOptions: { globals: globals.node },
