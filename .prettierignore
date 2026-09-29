@@ -1,0 +1,7 @@
+spikes/
+pnpm-lock.yaml
+apps/web/public/ng/
+
+# Human-owned docs (CONSTITUTION §4.2): never reformat automatically
+docs/CONSTITUTION.md
+docs/IDEA.md
