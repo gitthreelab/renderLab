@@ -5,7 +5,7 @@ const metaModules = import.meta.glob<unknown>('../../../../recipes/*/meta.ts', {
   import: 'default',
 });
 
-function folderName(path: string): string {
+export function folderName(path: string): string {
   const parts = path.split('/');
   return parts[parts.length - 2] ?? '';
 }
