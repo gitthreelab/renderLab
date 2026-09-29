@@ -76,3 +76,4 @@ T06 receta 1 · T07 home, StackBlitz, deploy y README.
 
 ## Decisiones tomadas
 - Idioma: español por defecto; contenido modelado por idioma desde el principio; selector de idioma fuera del MVP.
+- React Compiler (T05e): el código de la receta se compila en el navegador del lab con `@babel/standalone` + `babel-plugin-react-compiler`, cargados en diferido al activar el toggle, y Sandpack ejecuta el resultado desde ficheros ocultos (`/__compiled__/`). El lector edita el original; cada edición se recompila. Junto al toggle se muestra cuántos componentes se han compilado y un aviso si son 0 o si la compilación falla (ver `spikes/react-compiler/SPIKE.md`).

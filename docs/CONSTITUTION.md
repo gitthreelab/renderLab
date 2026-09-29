@@ -125,7 +125,8 @@ Cada ruta del repo cae en exactamente una zona.
 
 ## 6. Versiones
 
-- `react`, `react-dom`, `react-scan`, `bippy` y todos los paquetes `@angular/*` DEBEN declararse
+- `react`, `react-dom`, `react-scan`, `bippy`, `@babel/standalone`,
+  `babel-plugin-react-compiler` y todos los paquetes `@angular/*` DEBEN declararse
   con versión exacta (sin `^` ni `~`) en todo `package.json` del monorepo,
   porque las sondas dependen de APIs internas.
 - Cambiar cualquiera de esas versiones DEBE ser una tarea propia que
@@ -148,3 +149,4 @@ Cada ruta del repo cae en exactamente una zona.
 
 - 2026-09-28 — Creación. Borrador del agente; revisado y corregido por el humano.
 - 2026-09-29 — Idioma decidido: español por defecto, contenido preparado para varios idiomas (P8).
+- 2026-09-29 — §6: `@babel/standalone` y `babel-plugin-react-compiler` pasan a versión exacta (el toggle React Compiler depende de su salida y de ajustes internos del plugin).

@@ -13,15 +13,21 @@ const ReactSandbox = lazy(() => import('../components/ReactSandbox'));
 export default function RecipePage() {
   const { slug } = useParams();
   const [strictMode, setStrictMode] = useState(false);
+  const [reactCompiler, setReactCompiler] = useState(false);
   const recipe = slug ? findRecipe(slug) : undefined;
 
   if (!recipe) return <NotFoundPage />;
 
   const Content = recipeContents[recipe.slug];
-  const labKey = `${recipe.slug}-${strictMode}`;
+  const labKey = `${recipe.slug}-${strictMode}-${reactCompiler}`;
 
   function toggleStrictMode() {
     setStrictMode((current) => !current);
+    broadcastReset();
+  }
+
+  function toggleReactCompiler() {
+    setReactCompiler((current) => !current);
     broadcastReset();
   }
 
@@ -45,9 +51,22 @@ export default function RecipePage() {
       <label>
         <input type="checkbox" checked={strictMode} onChange={toggleStrictMode} /> StrictMode
       </label>
+      <label>
+        <input type="checkbox" checked={reactCompiler} onChange={toggleReactCompiler} /> React
+        Compiler
+      </label>
 
-      <Suspense fallback={<p>Cargando sandbox…</p>}>
-        <ReactSandbox key={labKey} slug={recipe.slug} strictMode={strictMode} />
+      <Suspense
+        fallback={
+          <p>{reactCompiler ? 'Cargando sandbox y React Compiler…' : 'Cargando sandbox…'}</p>
+        }
+      >
+        <ReactSandbox
+          key={labKey}
+          slug={recipe.slug}
+          strictMode={strictMode}
+          reactCompiler={reactCompiler}
+        />
       </Suspense>
     </main>
   );
