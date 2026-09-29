@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router';
 import { getRecipeContent } from '../recipes/content';
 import { findRecipe } from '../recipes/loader';
 import NotFoundPage from './NotFoundPage';
+import AngularFrame from '../components/AngularFrame';
 
 export default function RecipePage() {
     const { slug } = useParams();
@@ -26,6 +27,7 @@ export default function RecipePage() {
             ) : (
                 <p>Esta receta todavía no tiene explicación.</p>
             )}
+            <AngularFrame slug={recipe.slug} />
         </main>
     );
 }
