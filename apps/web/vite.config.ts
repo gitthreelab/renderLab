@@ -1,10 +1,46 @@
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import mdx from '@mdx-js/rollup';
 import react from '@vitejs/plugin-react';
-import type { Plugin } from 'vite';
+import { runnerImport, type Plugin } from 'vite';
 import { defineConfig } from 'vitest/config';
 
 // ng-host dev server (apps/ng-host, `ng serve` with baseHref /ng/).
 const NG_HOST_DEV_SERVER = 'http://localhost:4300';
+const RECIPES_DIR = fileURLToPath(new URL('../../recipes', import.meta.url));
+
+// Valida recipes/<slug>/package.json al arrancar dev y build: una dependencia sin
+// versión exacta, o que intente fijar react/react-dom, para aquí con un mensaje
+// claro. El loader del lab repite la validación en runtime (src/recipes/dependencies.ts).
+function recipePackagesCheck(): Plugin {
+  return {
+    name: 'recipe-packages-check',
+    async buildStart() {
+      // Node no puede importar @render-lab/protocol directamente (TS con imports
+      // sin extensión): runnerImport lo carga con la resolución de Vite.
+      const { module: protocol } =
+        await runnerImport<typeof import('@render-lab/protocol')>('@render-lab/protocol');
+      const errors: string[] = [];
+      for (const slug of readdirSync(RECIPES_DIR)) {
+        const file = join(RECIPES_DIR, slug, 'package.json');
+        if (slug.startsWith('_') || !existsSync(file)) continue;
+
+        this.addWatchFile(file);
+        let json: unknown;
+        try {
+          json = JSON.parse(readFileSync(file, 'utf8'));
+        } catch (error) {
+          errors.push(`recipes/${slug}/package.json: JSON no válido (${String(error)})`);
+          continue;
+        }
+        const result = protocol.parseRecipePackageFor(slug, json);
+        if (!result.ok) errors.push(`recipes/${slug}/package.json:\n${result.error}`);
+      }
+      if (errors.length > 0) this.error(errors.join('\n\n'));
+    },
+  };
+}
 
 // En preview, las rutas de ng-host sin extensión (p. ej. /ng/_smoke) sirven
 // dist/ng/index.html para que las resuelva el router de Angular. En dev lo hace ng serve.
@@ -28,6 +64,7 @@ export default defineConfig({
     { enforce: 'pre', ...mdx() },
     react({ include: /\.(mdx|js|jsx|ts|tsx)$/ }),
     ngHostPreviewFallback(),
+    recipePackagesCheck(),
   ],
   resolve: {
     // El MDX de recipes/ está fuera de apps/web: sus imports implícitos de

@@ -6,7 +6,10 @@
     "target": "ES2023",
     "lib": ["ES2023"],
     "types": ["node"],
-    "module": "NodeNext",
+    /* Vite y Playwright empaquetan sus configs; vite.config.ts importa además los
+       tipos de @render-lab/protocol, que usa imports sin extensión. */
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,

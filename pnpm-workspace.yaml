@@ -1,6 +1,9 @@
 packages:
   - apps/*
   - packages/*
+  # Solo las recetas con package.json (dependencias npm extra de su código React):
+  # así el typecheck de recipes/<slug>/react resuelve sus imports desde la carpeta.
+  - recipes/*
 
 allowBuilds:
   '@parcel/watcher': false

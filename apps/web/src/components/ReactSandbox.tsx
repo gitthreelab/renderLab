@@ -11,6 +11,7 @@ import {
 import probeSource from '@render-lab/probe-react/probe.js?raw';
 import { use, useDeferredValue, useEffect, useMemo } from 'react';
 import type * as ReactCompiler from '../lab/reactCompiler';
+import { getRecipeDependencies } from '../recipes/dependencies';
 import { getReactFiles } from '../recipes/reactFiles';
 
 const PROBE_PATH = '/render-lab-probe.js';
@@ -18,6 +19,8 @@ const ENTRY_PATH = '/render-lab-entry.js';
 // Espejo oculto con la salida del React Compiler. Repite la estructura de la
 // receta, así que los imports relativos entre sus ficheros siguen valiendo.
 const COMPILED_DIR = '/__compiled__';
+// Las fija el lab (§6); el schema del package.json de la receta impide declararlas.
+const LAB_DEPENDENCY_VERSIONS = { react: '19.2.8', 'react-dom': '19.2.8' };
 
 type Compiler = typeof ReactCompiler;
 type CompilerLoad = { ok: true; compiler: Compiler } | { ok: false; error: string };
@@ -177,7 +180,7 @@ export default function ReactSandbox({ slug, strictMode, reactCompiler }: ReactS
       files={files}
       customSetup={{
         entry: ENTRY_PATH,
-        dependencies: { react: '19.2.8', 'react-dom': '19.2.8' },
+        dependencies: { ...getRecipeDependencies(slug), ...LAB_DEPENDENCY_VERSIONS },
       }}
     >
       {compilerLoad && !compilerLoad.ok && (

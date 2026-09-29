@@ -21,8 +21,12 @@ React.
   Ningún fichero fuente DEBE contener `any` ni `@ts-ignore` ni `@ts-expect-error`.
 - **P2 Una receta = una carpeta.** Añadir una receta DEBE consistir solo
   en crear `recipes/<slug>/` con `meta.ts`, `content.<locale>.mdx`, `react/` y
-  `angular/`. Un diff que añade una receta NO DEBE tocar ficheros fuera de
-  esa carpeta.
+  `angular/`. Si su código React importa paquetes npm además de `react` y
+  `react-dom`, la carpeta PUEDE incluir un `package.json` que los declare con
+  versión exacta; ese `package.json` NO DEBE declarar `react` ni `react-dom`,
+  que fija el lab. Un diff que añade una receta NO DEBE tocar ficheros fuera de
+  esa carpeta, con una única excepción: `pnpm-lock.yaml`, regenerado por
+  `pnpm install` (nunca editado a mano) cuando la receta trae `package.json`.
 - **P3 Sin instrumentación manual.** El código que ve el lector
   (`recipes/*/react/**` y `recipes/*/angular/**`) NO DEBE importar las
   sondas, ni contener contadores, `postMessage` ni hooks de medición. La
@@ -83,6 +87,7 @@ Cada ruta del repo cae en exactamente una zona.
 - `recipes/*/react/**`.
 - `recipes/*/content.*.mdx`.
 - `recipes/*/meta.ts`.
+- `recipes/*/package.json`.
 - `packages/probe-react/**`.
 - `spikes/react-probe/**`.
 - `docs/CONSTITUTION.md` (ver §7).
@@ -150,3 +155,4 @@ Cada ruta del repo cae en exactamente una zona.
 - 2026-09-28 — Creación. Borrador del agente; revisado y corregido por el humano.
 - 2026-09-29 — Idioma decidido: español por defecto, contenido preparado para varios idiomas (P8).
 - 2026-09-29 — §6: `@babel/standalone` y `babel-plugin-react-compiler` pasan a versión exacta (el toggle React Compiler depende de su salida y de ajustes internos del plugin).
+- 2026-09-29 — P2: una receta PUEDE incluir `package.json` con dependencias npm extra en versión exacta (nunca `react` ni `react-dom`); el diff de añadir una receta PUEDE tocar además `pnpm-lock.yaml` (generado). §4.2: `recipes/*/package.json` pasa a la zona del humano.

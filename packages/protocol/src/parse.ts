@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { LabCommandSchema, ProbeEventSchema, type LabCommand, type ProbeEvent } from './messages';
 import { RecipeMetaSchema, type RecipeMeta } from './recipe';
+import { RecipePackageSchema, recipePackageName, type RecipePackage } from './recipePackage';
 
 /** Resultado de un parseo que nunca lanza. */
 export type ParseResult<T> = { ok: true; data: T } | { ok: false; error: string };
@@ -14,6 +15,25 @@ function safeParse<T>(schema: z.ZodType<T>, input: unknown): ParseResult<T> {
 
 export function parseRecipeMeta(input: unknown): ParseResult<RecipeMeta> {
   return safeParse(RecipeMetaSchema, input);
+}
+
+export function parseRecipePackage(input: unknown): ParseResult<RecipePackage> {
+  return safeParse(RecipePackageSchema, input);
+}
+
+/** `parseRecipePackage` + el nombre que corresponde a `recipes/<slug>/`. */
+export function parseRecipePackageFor(slug: string, input: unknown): ParseResult<RecipePackage> {
+  const result = parseRecipePackage(input);
+  if (!result.ok) return result;
+
+  const expected = recipePackageName(slug);
+  if (result.data.name !== expected) {
+    return {
+      ok: false,
+      error: `El "name" del package.json debe ser "${expected}" (es "${result.data.name}")`,
+    };
+  }
+  return result;
 }
 
 export function parseProbeEvent(input: unknown): ParseResult<ProbeEvent> {
