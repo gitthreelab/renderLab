@@ -9,8 +9,8 @@ export const SITE = {
   description:
     'Angular y React resolviendo la misma receta, lado a lado, con sondas que muestran qué componentes vuelven a ejecutar su vista. No es un benchmark.',
   author: {
-    name: 'TODO: nombre del autor',
-    url: 'TODO: https://…',
+    name: 'GitthreeLab',
+    url: 'https://gitthreelab.com/',
   },
   repository: {
     label: 'TODO: usuario/render-lab',
