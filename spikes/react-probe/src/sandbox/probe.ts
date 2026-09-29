@@ -1,4 +1,4 @@
-import { instrument, traverseRenderedFibers, isCompositeFiber, getDisplayName } from "bippy";
+import { instrument, traverseRenderedFibers, isCompositeFiber, getDisplayName } from "bippy/dist/index";
 
 
 const counts = new Map<string, number>()

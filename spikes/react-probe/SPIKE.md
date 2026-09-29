@@ -15,3 +15,9 @@ Pendiente.
   identifique.
 - Con StrictMode activo, los console.log salen duplicados pero la
   sonda sigue contando 1 por commit. Cumple la métrica.
+  - Dentro de Sandpack también funciona: los contadores cuadran
+  con los console.log al cargar y tras cada clic.
+- El bundler de Sandpack no resuelve `import from 'bippy'`; hay
+  que usar `bippy/dist/index`. Depende de la estructura interna
+  del paquete, así que la versión tiene que estar fijada.
+- Al editar el código dentro del Sandpack, los contadores..
