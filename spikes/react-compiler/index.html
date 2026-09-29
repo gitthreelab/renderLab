@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Spike React Compiler</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 16px; }
+      .row { display: flex; gap: 16px; align-items: flex-start; }
+      textarea { width: 520px; height: 460px; font: 12px monospace; }
+      iframe { width: 420px; height: 300px; border: 1px solid #999; }
+      table { border-collapse: collapse; } td, th { border: 1px solid #ccc; padding: 2px 8px; }
+    </style>
+  </head>
+  <body>
+    <fieldset>
+      <label>Vía
+        <select id="route">
+          <option value="precompile">2 · precompilar en el lab (@babel/standalone)</option>
+          <option value="bundler-cra">1a · .babelrc en el bundler (plantilla react-ts / CRA)</option>
+          <option value="bundler-parcel">1b · .babelrc en el bundler (entorno parcel)</option>
+          <option value="nodebox">3 · Vite en Nodebox (plantilla vite-react-ts)</option>
+        </select>
+      </label>
+      <label><input type="checkbox" id="compiler" /> React Compiler</label>
+      <label><input type="checkbox" id="strict" /> StrictMode</label>
+      <button id="reset">Reset</button>
+      <span id="status">cargando…</span>
+    </fieldset>
+    <div class="row">
+      <textarea id="editor" spellcheck="false"></textarea>
+      <div>
+        <iframe id="preview" title="preview"></iframe>
+        <table><thead><tr><th>Instancia</th><th>Renders</th></tr></thead><tbody id="score"></tbody></table>
+        <pre id="log"></pre>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

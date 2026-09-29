@@ -1,0 +1,3 @@
+# Raíz propia: el spike no forma parte del workspace del monorepo (§5).
+allowBuilds:
+  esbuild: false
