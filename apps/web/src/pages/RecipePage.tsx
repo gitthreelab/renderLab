@@ -5,6 +5,7 @@ import { recipeContents } from '../recipes/content';
 import { findRecipe } from '../recipes/loader';
 import NotFoundPage from './NotFoundPage';
 import AngularFrame from '../components/AngularFrame';
+import Scoreboard from '../components/Scoreboard';
 
 const ReactSandbox = lazy(() => import('../components/ReactSandbox'));
 
@@ -29,6 +30,7 @@ export default function RecipePage() {
       ) : (
         <p>Esta receta todavía no tiene explicación.</p>
       )}
+      <Scoreboard key={recipe.slug} />
       <AngularFrame slug={recipe.slug} />
       <Suspense fallback={<p>Cargando sandbox...</p>}>
         <ReactSandbox slug={recipe.slug} />
