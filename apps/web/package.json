@@ -12,11 +12,14 @@
     "e2e": "playwright test"
   },
   "dependencies": {
+    "@codesandbox/sandpack-react": "2.20.0",
     "@render-lab/protocol": "workspace:*",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "react-router": "8.4.0"
   },
   "devDependencies": {
+    "@mdx-js/rollup": "^3.1.1",
     "@playwright/test": "^1.63.0",
     "@types/node": "^24.19.0",
     "@types/react": "~19.2.18",

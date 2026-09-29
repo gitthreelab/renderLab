@@ -4,6 +4,7 @@ packages:
 
 allowBuilds:
   '@parcel/watcher': false
+  es5-ext: false
   esbuild: false
   lmdb: false
   msgpackr-extract: false
@@ -11,7 +12,11 @@ allowBuilds:
 # recipes/*/angular está fuera de ng-host: sus imports bare se resuelven desde la
 # raíz. Elevar solo lo que usa Angular mantiene una única copia (misma ruta real)
 # para el bundle de ng-host y el prebundle del dev server.
+# recipes/*/react solo se typechequea (Vite lo carga como texto para Sandpack):
+# basta con elevar los tipos de React.
 publicHoistPattern:
   - '@angular/*'
   - rxjs
   - tslib
+  - '@types/react'
+  - '@types/react-dom'

@@ -1,0 +1,28 @@
+/* Código de recipes/ que consume apps/web: meta.ts (loader con import.meta.glob)
+   y react/** (Sandpack lo carga como texto con ?raw, así que Vite no lo compila).
+   Sus imports bare se resuelven desde la raíz: @render-lab/protocol es
+   devDependency de la raíz y los tipos de React se elevan con publicHoistPattern. */
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "strict": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.recipes.tsbuildinfo",
+    "target": "ES2023",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "types": [],
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true
+  },
+  "include": ["../../recipes/*/meta.ts", "../../recipes/*/react/**/*"]
+}

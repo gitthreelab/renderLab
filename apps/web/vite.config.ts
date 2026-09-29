@@ -1,3 +1,4 @@
+import mdx from '@mdx-js/rollup';
 import react from '@vitejs/plugin-react';
 import type { Plugin } from 'vite';
 import { defineConfig } from 'vitest/config';
@@ -21,7 +22,18 @@ function ngHostPreviewFallback(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), ngHostPreviewFallback()],
+  plugins: [
+    // MDX antes que React: compila recipes/*/content.<locale>.mdx a JSX y
+    // plugin-react le aplica Fast Refresh como a cualquier componente.
+    { enforce: 'pre', ...mdx() },
+    react({ include: /\.(mdx|js|jsx|ts|tsx)$/ }),
+    ngHostPreviewFallback(),
+  ],
+  resolve: {
+    // El MDX de recipes/ está fuera de apps/web: sus imports implícitos de
+    // react/jsx-runtime se resuelven desde aquí (una sola copia de React).
+    dedupe: ['react', 'react-dom'],
+  },
   server: {
     port: 5173,
     strictPort: true,

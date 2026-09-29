@@ -1,0 +1,15 @@
+/* Solución para el editor: no compila nada. Permite que el servidor de TypeScript
+   encuentre el proyecto de los ficheros que no tienen tsconfig en su carpeta,
+   como recipes/**. Los scripts siguen usando el tsconfig de cada paquete. */
+{
+  "compilerOptions": { "strict": true },
+  "files": [],
+  "references": [
+    { "path": "./apps/web/tsconfig.app.json" },
+    { "path": "./apps/web/tsconfig.recipes.json" },
+    { "path": "./apps/web/tsconfig.node.json" },
+    { "path": "./apps/ng-host/tsconfig.app.json" },
+    { "path": "./apps/ng-host/tsconfig.scripts.json" },
+    { "path": "./packages/protocol/tsconfig.json" }
+  ]
+}
