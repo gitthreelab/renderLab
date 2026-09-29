@@ -19,7 +19,7 @@ class Estado {
 }
 
 @Component({
-  selector: 'estado-compartido-boton',
+  selector: 'estado-compartido-zustand-boton',
   template: '<button type="button" (click)="estado.sumar()">Sumar</button>',
 })
 class Boton {
@@ -27,7 +27,7 @@ class Boton {
 }
 
 @Component({
-  selector: 'estado-compartido-ver-contador',
+  selector: 'estado-compartido-zustand-ver-contador',
   template: '<p>Contador: {{ estado.contador() }}</p>',
 })
 class VerContador {
@@ -35,7 +35,7 @@ class VerContador {
 }
 
 @Component({
-  selector: 'estado-compartido-ver-nombre',
+  selector: 'estado-compartido-zustand-ver-nombre',
   template: '<p>Nombre: {{ estado.nombre() }}</p>',
 })
 class VerNombre {
@@ -43,21 +43,21 @@ class VerNombre {
 }
 
 @Component({
-  selector: 'estado-compartido-estatico',
+  selector: 'estado-compartido-zustand-estatico',
   template: '<p>Soy estático</p>',
 })
 class Estatico {}
 
 // Provee Estado en App y no en root: cada receta tiene su propia instancia.
 @Component({
-  selector: 'estado-compartido-root',
+  selector: 'estado-compartido-zustand-root',
   imports: [Boton, VerContador, VerNombre, Estatico],
   providers: [Estado],
   template: `
-    <estado-compartido-boton />
-    <estado-compartido-ver-contador />
-    <estado-compartido-ver-nombre />
-    <estado-compartido-estatico />
+    <estado-compartido-zustand-boton />
+    <estado-compartido-zustand-ver-contador />
+    <estado-compartido-zustand-ver-nombre />
+    <estado-compartido-zustand-estatico />
   `,
 })
 export default class App {}
