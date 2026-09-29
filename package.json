@@ -4,8 +4,8 @@
   "type": "module",
   "packageManager": "pnpm@12.6.0",
   "scripts": {
-    "dev": "pnpm --parallel --filter ng-host --filter web dev",
-    "build": "pnpm --filter ng-host build && pnpm --filter web build",
+    "dev": "pnpm --filter @render-lab/probe-react build && pnpm --parallel --filter @render-lab/probe-react --filter ng-host --filter web dev",
+    "build": "pnpm --filter @render-lab/probe-react build && pnpm --filter ng-host build && pnpm --filter web build",
     "lint": "eslint .",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r --if-present test",

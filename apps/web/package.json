@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@codesandbox/sandpack-react": "2.20.0",
+    "@render-lab/probe-react": "workspace:*",
     "@render-lab/protocol": "workspace:*",
     "react": "19.2.8",
     "react-dom": "19.2.8",

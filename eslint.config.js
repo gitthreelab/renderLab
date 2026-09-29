@@ -20,11 +20,17 @@ export default defineConfig([
       'apps/ng-host/src/**/*.ts',
       'recipes/*/angular/**/*.ts',
       'packages/probe-ng/src/**/*.ts',
+      'packages/probe-react/src/**/*.{ts,tsx}',
     ],
     languageOptions: { globals: globals.browser },
   },
   {
-    files: ['*.{js,ts}', 'apps/*/*.{js,ts}', 'apps/ng-host/scripts/**/*.mts'],
+    files: [
+      '*.{js,ts}',
+      'apps/*/*.{js,ts}',
+      'packages/*/*.{js,ts}',
+      'apps/ng-host/scripts/**/*.mts',
+    ],
     languageOptions: { globals: globals.node },
   },
 ]);

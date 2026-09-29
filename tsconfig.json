@@ -11,6 +11,7 @@
     { "path": "./apps/ng-host/tsconfig.app.json" },
     { "path": "./apps/ng-host/tsconfig.scripts.json" },
     { "path": "./packages/protocol/tsconfig.json" },
-    { "path": "./packages/probe-ng/tsconfig.json" }
+    { "path": "./packages/probe-ng/tsconfig.json" },
+    { "path": "./packages/probe-react/tsconfig.json" }
   ]
 }
