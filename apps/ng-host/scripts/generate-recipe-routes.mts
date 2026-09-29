@@ -1,7 +1,8 @@
 /**
  * Genera src/app/recipe.routes.generated.ts: una ruta lazy /ng/<slug> por
  * cada recipes/<slug>/angular/index.ts, que exporta por defecto el componente
- * raíz standalone de la receta.
+ * raíz standalone de la receta. Cada raíz se registra en la sonda
+ * (@render-lab/probe-ng) para que solo se midan componentes de recetas.
  *
  * Las carpetas que empiezan por "_" son fixtures (p. ej. _smoke): tienen ruta
  * aquí, pero el loader de apps/web las excluye del listado.
@@ -41,14 +42,23 @@ const importPath = (slug: string): string =>
     .split(sep)
     .join('/');
 
+// recipeRoot registra el export default como raíz de receta en la sonda: solo
+// se miden esa raíz y sus descendientes, nunca los componentes de ng-host.
 const routes = slugs
-  .map((slug) => `  { path: '${slug}', loadComponent: () => import('${importPath(slug)}') },`)
+  .map(
+    (slug) =>
+      `  {
+    path: '${slug}',
+    loadComponent: () => import('${importPath(slug)}').then((m) => recipeRoot(m.default)),
+  },`,
+  )
   .join('\n');
 
 writeFileSync(
   OUT_FILE,
   `// Generado por scripts/generate-recipe-routes.mts. No editar a mano.
 import { Routes } from '@angular/router';
+import { recipeRoot } from '@render-lab/probe-ng';
 
 export const recipeRoutes: Routes = [
 ${routes}

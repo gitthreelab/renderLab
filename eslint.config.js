@@ -16,7 +16,11 @@ export default defineConfig([
     languageOptions: { globals: globals.browser },
   },
   {
-    files: ['apps/ng-host/src/**/*.ts', 'recipes/*/angular/**/*.ts'],
+    files: [
+      'apps/ng-host/src/**/*.ts',
+      'recipes/*/angular/**/*.ts',
+      'packages/probe-ng/src/**/*.ts',
+    ],
     languageOptions: { globals: globals.browser },
   },
   {

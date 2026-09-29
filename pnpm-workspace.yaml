@@ -14,9 +14,12 @@ allowBuilds:
 # para el bundle de ng-host y el prebundle del dev server.
 # recipes/*/react solo se typechequea (Vite lo carga como texto para Sandpack):
 # basta con elevar los tipos de React.
+# zod: packages/protocol (vía packages/probe-ng) se empaqueta dentro de ng-host
+# sin prebundle, y el dev server resuelve sus imports bare desde ng-host.
 publicHoistPattern:
   - '@angular/*'
   - rxjs
   - tslib
+  - zod
   - '@types/react'
   - '@types/react-dom'

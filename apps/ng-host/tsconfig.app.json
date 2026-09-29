@@ -10,5 +10,13 @@
     "rootDir": "../..",
     "types": []
   },
-  "include": ["src/**/*.ts", "../../recipes/*/angular/**/*.ts"]
+  /* Los paquetes del workspace se consumen como fuente TS: el compilador de
+     Angular exige que estén en el programa. */
+  "include": [
+    "src/**/*.ts",
+    "../../recipes/*/angular/**/*.ts",
+    "../../packages/probe-ng/src/**/*.ts",
+    "../../packages/protocol/src/**/*.ts"
+  ],
+  "exclude": ["../../packages/*/src/**/*.test.ts"]
 }
