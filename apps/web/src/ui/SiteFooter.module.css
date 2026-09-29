@@ -22,14 +22,3 @@
   font-weight: 600;
   color: var(--text);
 }
-
-.placeholder {
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  color: var(--warning);
-  background: var(--warning-soft);
-  border: 1px dashed var(--warning);
-  border-radius: var(--radius-sm);
-  padding: 0.05rem 0.4rem;
-  cursor: help;
-}

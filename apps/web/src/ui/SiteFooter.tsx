@@ -1,30 +1,5 @@
-import { SITE, isPlaceholder, placeholderText } from '../site';
+import { SITE } from '../site';
 import styles from './SiteFooter.module.css';
-
-type CreditProps = {
-  label: string;
-  url: string;
-};
-
-// Enlace del pie; mientras el valor sea un marcador de posición (site.ts) lo
-// muestra señalado como pendiente en vez de enlazar a ninguna parte.
-function Credit({ label, url }: CreditProps) {
-  if (isPlaceholder(label) || isPlaceholder(url)) {
-    return (
-      <span
-        className={styles.placeholder}
-        title="Marcador de posición: rellenar en apps/web/src/site.ts"
-      >
-        ⟨ {placeholderText(label)} ⟩
-      </span>
-    );
-  }
-  return (
-    <a href={url} rel="noopener">
-      {label}
-    </a>
-  );
-}
 
 export default function SiteFooter() {
   return (
@@ -35,8 +10,10 @@ export default function SiteFooter() {
           React {SITE.versions.react}, los dos en modo desarrollo.
         </p>
         <p className={styles.line}>
-          Hecho por <Credit label={SITE.author.name} url={SITE.author.url} /> · Código en{' '}
-          <Credit label={SITE.repository.label} url={SITE.repository.url} />
+          Hecho por{' '}
+          <a href={SITE.author.url} rel="noopener">
+            {SITE.author.name}
+          </a>
         </p>
       </div>
     </footer>
