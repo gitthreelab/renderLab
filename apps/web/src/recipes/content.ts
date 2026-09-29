@@ -6,16 +6,12 @@ type MdxModule = { default: ComponentType };
 
 const contentModules = import.meta.glob<MdxModule>('../../../../recipes/*/content.*.mdx');
 
-const contentComponents = new Map<string, LazyExoticComponent<ComponentType>>();
+export const recipeContents: Partial<Record<string, LazyExoticComponent<ComponentType>>> = {};
 
 for (const [path, load] of Object.entries(contentModules)) {
-    const folder = folderName(path);
-    const file = path.split('/').at(-1);
-    if (folder.startsWith('_') || file !== contentFileName(DEFAULT_LOCALE)) continue;
+  const folder = folderName(path);
+  const file = path.split('/').at(-1);
+  if (folder.startsWith('_') || file !== contentFileName(DEFAULT_LOCALE)) continue;
 
-    contentComponents.set(folder, lazy(load));
-}
-
-export function getRecipeContent(slug: string) {
-    return contentComponents.get(slug);
+  recipeContents[folder] = lazy(load);
 }

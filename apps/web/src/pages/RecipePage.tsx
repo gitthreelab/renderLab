@@ -1,10 +1,12 @@
 import { DEFAULT_LOCALE } from '@render-lab/protocol';
-import { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { Link, useParams } from 'react-router';
-import { getRecipeContent } from '../recipes/content';
+import { recipeContents } from '../recipes/content';
 import { findRecipe } from '../recipes/loader';
 import NotFoundPage from './NotFoundPage';
 import AngularFrame from '../components/AngularFrame';
+
+const ReactSandbox = lazy(() => import('../components/ReactSandbox'));
 
 export default function RecipePage() {
     const { slug } = useParams();
@@ -12,7 +14,7 @@ export default function RecipePage() {
 
     if (!recipe) return <NotFoundPage />;
 
-    const Content = getRecipeContent(recipe.slug);
+    const Content = recipeContents[recipe.slug];
 
     return (
         <main>
@@ -28,6 +30,9 @@ export default function RecipePage() {
                 <p>Esta receta todavía no tiene explicación.</p>
             )}
             <AngularFrame slug={recipe.slug} />
+            <Suspense fallback={<p>Cargando sandbox...</p>}>
+                <ReactSandbox slug={recipe.slug} />
+            </Suspense>
         </main>
     );
 }
