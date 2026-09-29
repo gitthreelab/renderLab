@@ -1,17 +1,14 @@
-import { DEFAULT_LOCALE } from '@render-lab/protocol';
-import { loadRecipes } from './recipes/loader';
-
-const recipes = loadRecipes();
+import { Route, Routes } from 'react-router';
+import NotFoundPage from './pages/NotFoundPage';
+import RecipeListPage from './pages/RecipeListPage';
+import RecipePage from './pages/RecipePage';
 
 export default function App() {
   return (
-    <main>
-      <h1>Render Lab</h1>
-      <ul>
-        {recipes.map((recipe) => (
-          <li key={recipe.slug}>{recipe.title[DEFAULT_LOCALE]}</li>
-        ))}
-      </ul>
-    </main>
+    <Routes>
+      <Route path="/" element={<RecipeListPage />} />
+      <Route path="/recetas/:slug" element={<RecipePage />} />
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
   );
 }

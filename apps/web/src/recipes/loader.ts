@@ -33,3 +33,9 @@ export function loadRecipes(): RecipeMeta[] {
 
   return recipes.sort((a, b) => a.order - b.order);
 }
+
+export const recipes = loadRecipes();
+
+export function findRecipe(slug: string): RecipeMeta | undefined {
+  return recipes.find((recipe) => recipe.slug === slug);
+}
